@@ -1,4 +1,5 @@
 const express = require("express")
+const bcrypt = require('bcryptjs')
 const app = express()
 const data = require('./data')
 const PORT = process.env.PORT || 3000
@@ -33,10 +34,8 @@ app.get("/users/:id", (req, res) => {
 //the URL '/users/2/schedules' will return a list of all schedules for user n°2
 app.get("/users/:id/schedules", (req, res) => {
     const id = parseInt(req.params.id)
-    tempSchedules = data.schedules.filter(schedule => {
-       // console.log(schedule.user_id)
-        if (schedule.user_id === id) return schedule
-    })
+    tempSchedules = data.schedules.filter(schedule => schedule.user_id === id)
+    //console.log(tempSchedules)
     res.send(tempSchedules)
 })
 
@@ -50,9 +49,13 @@ app.post("/schedules", (req, res) => {
 })
 
 
-//‘/users’ (this time in POST!) to add a new user. It will return the newly created user. The user's password must be encrypted in SHA256.
+//‘/users’ (this time in POST!) to add a new user. It will return the newly created user. The user's password must be encrypted in bcrypt.
 app.post("/users", (req, res) => {
-    const newUsers = req.body
+    const { firstname, lastname, email, password } = req.body
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(password, salt)
+    console.log(hash)
+    const newUsers ={ firstname, lastname, email, password:hash }
     data.users.push(newUsers)
     res.send(data.users)
     
