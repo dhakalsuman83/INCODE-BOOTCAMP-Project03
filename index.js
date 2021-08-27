@@ -2,14 +2,12 @@ const express = require("express")
 const bcrypt = require('bcryptjs')
 const app = express()
 const data = require('./data')
-var expressLayouts = require('express-ejs-layouts')
+
 
 const PORT = process.env.PORT || 3000
 
 
 //setting template engine and layouts
-app.set('view engine', 'ejs')
-app.use(expressLayouts)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
