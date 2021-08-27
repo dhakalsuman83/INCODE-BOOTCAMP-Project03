@@ -1,0 +1,9 @@
+<h3>Schedules of the users</h3>
+<% schedules.forEach((schedule,index) =>{ %>
+    <h3><%= index+1 %>.</h3>
+    <p><strong>user_id: </strong><%= schedule.user_id %></p>
+    <p><strong>Day: </strong><%= schedule.day%></p>
+    <p><strong>start_at: </strong><%= schedule.start_at%></p>
+    <p><strong>end_at: </strong><%= schedule.end_at%></p>
+
+<% }) %>
