@@ -1,7 +1,22 @@
-<form action="/users/new" method = "POST">
-    <label for="firstname">firstname:</label>:<input name="firstname" id="firstname" required><br>
-    lastname: <input name="lastname" required><br>
-    Email: <input name="email" required><br>
-    Password: <input name="password" required><br>
-    <button>Submit</button>
-</form>
+
+<div class="form">
+    <form method="POST" action="/users/new" class="flex flex-column">
+        <div>
+            <label for="firstname">Firstname:</label>
+            <input name="firstname" id="user_id" type="text" required>
+        </div>
+        <div>
+            <label for="lastname">Lastname:</label>
+            <input name="lastname" id="day" type="text" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input name="email" id="email" type="email" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input name="password" id="password" type="password" required>
+        </div>
+        <button class="btn">Submit</button>
+    </form>
+</div>
