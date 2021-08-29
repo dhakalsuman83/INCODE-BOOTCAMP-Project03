@@ -6,13 +6,16 @@ const expressLayouts = require("express-ejs-layouts")
 
 
 
+
+
+
 const PORT = process.env.PORT || 3000
 
 
 //setting template engine and layouts
 
 app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 
 //setting the template engine
 app.set("view engine", "ejs")
@@ -31,6 +34,7 @@ app.get("/", (req, res)=> {
 //‘/users’, which returns the list of users
 app.get("/users", (req, res) => {
     res.render("./pages/users", {
+        msg: "",
         users : data.users
     })
 })
@@ -42,19 +46,16 @@ app.get("/schedules", (req, res) => {
         schedules: data.schedules})
 })
 
+app.get("/users/new", (req, res) => {
+    res.render("./pages/user-form")
 
-//the URL '/users/2' will return the information of user n°2
+})
+
 app.get("/users/:id", (req, res) => {
-    input = req.params.id
-    if (input === "new") {
-        res.render("./pages/user-form")
-    } else {
     res.render("./pages/specific-user", {
-        user : data.users[parseInt(req.params.id)]
+        user: data.users[parseInt(req.params.id)]
     })
-    }
         
-    
 })
 
 //the URL '/users/2/schedules' will return a list of all schedules for user n°2
@@ -65,6 +66,25 @@ app.get("/users/:id/schedules", (req, res) => {
     res.render("./pages/specific-schedules", {
         tempSchedules
     })
+})
+
+
+app.post("/users/new", (req, res) => {
+    // const newUser = req.body
+    // console.log(newUser)
+    // data.users.push(newUser)
+    // console.log(data.users)
+    const { firstname, lastname, email, password } = req.body
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(password, salt)
+    // console.log(hash)
+    const newUsers = { firstname, lastname, email, password: hash }
+    data.users.push(newUsers)
+    res.render("./pages/users", {
+        msg: "Details of the users with the added details",
+        users: data.users
+    })
+
 })
 
 
