@@ -87,15 +87,34 @@ router.post("/schedules/new", (req, res) => {
 
 
 function time(time) {
-    console.log(time)
-    let hour = time.split(':')[0];
-    Number(hour) <= 12 ? (time += ' AM') : (time += ' PM');
-    hour = Number(hour) % 12;
-    Number(hour) === 0 ? (hour = 12) : hour = hour;
-    hour = hour < 10 ? '0' + hour : hour;
-    return `${hour}:${time.split(':')[1]}`;
-
+    temp = time.split(":")[0]
+    if (Number(temp) == 0) return (`12:${time.split(":")[1]}` + "AM")
+    else {
+        if (Number(temp) > 0 && Number(temp) < 12) { 
+            time += "AM"
+            return (`${temp}:${time.split(":")[1]}`)
+        } else if(Number(temp) == 12) {
+            time += "PM"
+            return (`${Number(temp)}:${time.split(":")[1]}`)
+        } else {
+            time += "PM"
+            return (`${Number(temp)-12}:${time.split(":")[1]}`)
+        }
+    }
+    
+    
 }
+
+// function time(time) {
+//     console.log(time)
+//     let hour = time.split(':')[0];
+//     Number(hour) <= 12 ? (time += ' AM') : (time += ' PM');
+//     hour = Number(hour) % 12;
+//     Number(hour) === 0 ? (hour = 12) : hour = hour;
+//     hour = hour < 10 ? '0' + hour : hour;
+//     return `${hour}:${time.split(':')[1]}`;
+
+// }
 
 module.exports = router
 
