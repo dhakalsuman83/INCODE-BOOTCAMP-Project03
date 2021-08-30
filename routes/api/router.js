@@ -3,13 +3,42 @@ const router = express.Router()
 
 
 const { users, schedules } = require("../../data")
-const pgp = require("../../database")
+const db = require('../../database')
 
 
 
-router.get("/", (req, res) => {
-    res.render("./pages/user-form")
+router.get('/', (req, res) => {
+    try {
+        res.render("./pages/schedules-form")
+    } catch (error) {
+        console.error(error.message)
+    }
+    
 })
+
+router.get("/schedules", async (req, res) => {
+    const newData = await db.query('SELECT * FROM users');
+    res.render('./pages/schedules', {
+        schedules: newData
+    });
+});
+
+
+router.post("/", async (req, res) => {
+    try {
+        const { user_id, day, start_at, end_at } = req.body
+        console.log("123")
+        await db.query(
+            //`INSERT INTO users (user_id,day,start_at,end_at) VALUES('${user_id}', '${day}', '${start_at}', '${end_at}')`
+            `INSERT INTO users (user_id,day,start_at,end_at) VALUES($1,$2,$3,$4)`,
+            [user_id, day, start_at, end_at]
+        );
+        res.redirect('/')
+    } catch (error) {
+        console.error(error.message)
+    };
+    
+});
 
 
 module.exports = router
