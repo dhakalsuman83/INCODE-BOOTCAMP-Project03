@@ -1,44 +1,71 @@
 const express = require('express')
 const router = express.Router()
+const week = require("../../helper/weekdays")
 
-
-const { users, schedules } = require("../../data")
 const db = require('../../database')
 
 
-
-router.get('/', (req, res) => {
+//handler to create the new schedules
+router.get('/new', (req, res) => {
     try {
-        res.render("./pages/schedules-form")
+        res.render("./pages/schedules-form", {
+            weeks:week
+        }) //renders the form page
     } catch (error) {
         console.error(error.message)
     }
     
 })
 
-router.get("/schedules", async (req, res) => {
-    const newData = await db.query('SELECT * FROM users');
+router.get("/", async (req, res) => {
+    const newData = await db.query('SELECT * FROM users'); //selects all the data from the table users
+    // console.log(newData)
+    // res.json(newData);
+    //console.log(newData[0].day)
+    newData.forEach(n => n.day = week.find(nn => nn.id == n.day))
     res.render('./pages/schedules', {
         schedules: newData
     });
 });
 
 
-router.post("/", async (req, res) => {
+router.post("/new", async (req, res) => {
     try {
-        const { user_id, day, start_at, end_at } = req.body
-        console.log("123")
-        await db.query(
+        let {username, day, start_at, end_at } = req.body
+        start_at = time(start_at);
+        end_at = time(end_at);
+        newData = (await db.query(
             //`INSERT INTO users (user_id,day,start_at,end_at) VALUES('${user_id}', '${day}', '${start_at}', '${end_at}')`
-            `INSERT INTO users (user_id,day,start_at,end_at) VALUES($1,$2,$3,$4)`,
-            [user_id, day, start_at, end_at]
-        );
+            `INSERT INTO users (username,day,start_at,end_at) VALUES($1,$2,$3,$4) RETURNING *`,
+                [username, day, start_at, end_at]
+            ));
+        console.log(newData)
         res.redirect('/')
     } catch (error) {
         console.error(error.message)
     };
     
 });
+
+
+function time(time) {
+    temp = time.split(":")[0]
+    if (Number(temp) == 0) return (`12:${time.split(":")[1]}` + "AM")
+    else {
+        if (Number(temp) > 0 && Number(temp) < 12) { 
+            time += "AM"
+            return (`${temp}:${time.split(":")[1]}`)
+        } else if(Number(temp) == 12) {
+            time += "PM"
+            return (`${Number(temp)}:${time.split(":")[1]}`)
+        } else {
+            time += "PM"
+            return (`${Number(temp)-12}:${time.split(":")[1]}`)
+        }
+    }
+    
+    
+};
 
 
 module.exports = router
@@ -111,4 +138,37 @@ module.exports = router
 // //     res.send(data.users)
     
 // // })
+
+
+
+// <% switch(Number(schedule.day)){ %>
+//     <%case 1:%>
+//      <%schedule.day="Monday";%>
+//      <%break;%>
+
+//     <%case 2:%>
+//      <%schedule.day="Tuesday";%>
+//      <%break;%>
+    
+//     <%case 3:%>
+//      <%schedule.day="Wednesday";%>
+//      <%break;%>
+    
+//     <%case 4:%>
+//      <%schedule.day="Thursday";%>
+//      <%break;%>
+    
+//     <%case 5:%>
+//      <%schedule.day="Friday";%>
+//      <%break;%>
+    
+//     <%case 6:%>
+//      <%schedule.day="Saturday";%>
+//      <%break;%>
+    
+//     <%case 7:%>
+//      <%schedule.day="Sunday";%>
+//      <%break;%>
+    
+// <% }; %> 
 

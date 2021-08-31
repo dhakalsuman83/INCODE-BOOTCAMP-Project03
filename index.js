@@ -1,7 +1,6 @@
 const express = require("express")
 const bcrypt = require('bcryptjs')
 const app = express()
-const data = require('./data')
 const expressLayouts = require("express-ejs-layouts")
 
 const PORT = process.env.PORT || 3000
