@@ -1,0 +1,29 @@
+<div class="form">
+    <form method="POST" action="/new" class="flex flex-column">
+        <div>
+            <label for="username">Username:</label>
+            <input name="username" id="username" required>
+        </div>
+        <div>
+            <label for="day">Day:</label>
+            <select name="day" id="day">
+                <option value="0">--Please select the day--</option>
+                <%weeks.forEach(week =>{ %>
+                    <option value="<%=week.id%>"><%=week.days%></option>
+                <%})%>
+            </select>
+        </div>
+        <div>
+            <label for="start_at">Start_at:</label>
+            <input name="start_at" id="start_at" type="time" required>
+        </div>
+        <div>
+            <label for="end_at">End_at:</label>
+            <input name="end_at" id="end_at" type="time" required>
+        </div>
+        <button class="btn">Submit</button>
+        <div>
+            <p id="small1">To view all the existing schedules, please <a id="a1" href="/">click here</a></p>
+        </div>
+    </form>
+</div>
