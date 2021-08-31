@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const week = require("../../helper/weekdays")
+const timeConversion = require("../../helper/timeConverter")
 
 const db = require('../../database')
 
@@ -29,23 +30,23 @@ router.get("/", async (req, res) => {
 });
 
 
-router.post("/new", async (req, res) => {
+router.post("/new", timeConversion, async (req, res) => {
     try {
         let {username, day, start_at, end_at } = req.body
         start_at = time(start_at);
         end_at = time(end_at);
-        newData = (await db.query(
+        newData = (await dbase.query(
             //`INSERT INTO users (user_id,day,start_at,end_at) VALUES('${user_id}', '${day}', '${start_at}', '${end_at}')`
             `INSERT INTO users (username,day,start_at,end_at) VALUES($1,$2,$3,$4) RETURNING *`,
                 [username, day, start_at, end_at]
             ));
-        console.log(newData)
         res.redirect('/')
     } catch (error) {
         console.error(error.message)
     };
     
 });
+
 
 
 function time(time) {
@@ -64,8 +65,8 @@ function time(time) {
         }
     }
     
-    
-};
+
+    }
 
 
 module.exports = router
