@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS test_posts;
+DROP DATABASE IF EXISTS mrcoffee;
 
 
-CREATE DATABASE test_posts;
+CREATE DATABASE mrcoffee;

@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const week = require("../../helper/weekdays")
-const timeConversion = require("../../helper/timeConverter")
 
 const db = require('../../database')
 
@@ -19,28 +18,33 @@ router.get('/new', (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    const newData = await db.query('SELECT * FROM users'); //selects all the data from the table users
+    const newData = await db.query('SELECT * FROM schedule'); //selects all the data from the table users
     // console.log(newData)
     // res.json(newData);
     //console.log(newData[0].day)
-    newData.forEach(n => n.day = week.find(nn => nn.id == n.day))
+    newData.forEach(n => {
+        n.day = week.find(nn => nn.id == n.day)
+        n.start_at = time(n.start_at)
+        n.end_at=time(n.end_at)
+    })
+
     res.render('./pages/schedules', {
         schedules: newData
     });
 });
 
 
-router.post("/new", timeConversion, async (req, res) => {
+router.post("/new",async (req, res) => {
     try {
         let {username, day, start_at, end_at } = req.body
-        start_at = time(start_at);
-        end_at = time(end_at);
-        newData = (await dbase.query(
+        // start_at = time(start_at);
+        // end_at = time(end_at);
+        let newData = (await db.query(
             //`INSERT INTO users (user_id,day,start_at,end_at) VALUES('${user_id}', '${day}', '${start_at}', '${end_at}')`
-            `INSERT INTO users (username,day,start_at,end_at) VALUES($1,$2,$3,$4) RETURNING *`,
+            `INSERT INTO schedule (username,day,start_at,end_at) VALUES($1,$2,$3,$4) RETURNING *`,
                 [username, day, start_at, end_at]
-            ));
-        res.redirect('/')
+        ));
+        res.redirect('/new')
     } catch (error) {
         console.error(error.message)
     };
@@ -51,22 +55,22 @@ router.post("/new", timeConversion, async (req, res) => {
 
 function time(time) {
     temp = time.split(":")[0]
-    if (Number(temp) == 0) return (`12:${time.split(":")[1]}` + "AM")
+    if (Number(temp) == 0) return (`12:${time.split(":")[1]}:${time.split(":")[2]}` + "AM")
     else {
         if (Number(temp) > 0 && Number(temp) < 12) { 
             time += "AM"
-            return (`${temp}:${time.split(":")[1]}`)
+            return (`${temp}:${time.split(":")[1]}:${time.split(":")[2]}`)
         } else if(Number(temp) == 12) {
             time += "PM"
-            return (`${Number(temp)}:${time.split(":")[1]}`)
+            return (`${Number(temp)}:${time.split(":")[1]}:${time.split(":")[2]}`)
         } else {
             time += "PM"
-            return (`${Number(temp)-12}:${time.split(":")[1]}`)
+            return (`${Number(temp)-12}:${time.split(":")[1]}:${time.split(":")[2]}`)
         }
     }
     
 
-    }
+}
 
 
 module.exports = router
