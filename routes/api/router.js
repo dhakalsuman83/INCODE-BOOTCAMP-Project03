@@ -17,6 +17,8 @@ router.get('/new', (req, res) => {
     
 })
 
+
+
 router.get("/", async (req, res) => {
     const newData = await db.query('SELECT * FROM schedule'); //selects all the data from the table users
     // console.log(newData)
@@ -28,10 +30,18 @@ router.get("/", async (req, res) => {
         n.end_at=time(n.end_at)
     })
 
-    res.render('./pages/schedules', {
+    res.render('./pages/table', {
         schedules: newData
     });
 });
+
+// router.get("/schedule/:id", async(req, res) => {
+//     const newData = await db.query('SELECT * FROM schedule');
+//     res.render('./pages/sss', {
+//         schedule : newData[Number(req.params.id)]
+//     })
+    
+// })
 
 
 router.post("/new",async (req, res) => {
@@ -52,7 +62,7 @@ router.post("/new",async (req, res) => {
 });
 
 
-
+// A function to concert the 24 hr format time in am and pm
 function time(time) {
     temp = time.split(":")[0]
     if (Number(temp) == 0) return (`12:${time.split(":")[1]}:${time.split(":")[2]}` + "AM")
@@ -68,8 +78,6 @@ function time(time) {
             return (`${Number(temp)-12}:${time.split(":")[1]}:${time.split(":")[2]}`)
         }
     }
-    
-
 }
 
 

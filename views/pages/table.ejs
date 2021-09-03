@@ -1,0 +1,23 @@
+<table>
+    <caption>Schedule Tables</caption>
+    <tr>
+        <th>ID:</th>
+        <th>Username:</th>
+        <th>Day:</th>
+        <th>Start_at:</th>
+        <th>End_at:</th>
+    </tr>
+    <% schedules.forEach((schedule,index) => { %>
+        <tr>
+            <td><%= schedule.id%></td>
+            <td><%= schedule.username%></td>
+            <td><%= schedule.day.days%></td>
+            <td><%= schedule.start_at%></td>
+            <td><%= schedule.end_at%></td>
+        </tr>
+
+    <%})%>
+    
+</table>
+
+<h3 class="create-schedule-h3">To create a new Schedule, Please <a id="a1" href="/new">click here</a></h3>

@@ -1,5 +1,6 @@
 const express = require("express")
 const bcrypt = require('bcryptjs')
+const homeRouter = require("./routes/api/router")
 const app = express()
 const expressLayouts = require("express-ejs-layouts")
 
@@ -19,7 +20,7 @@ app.set("layout","./layouts/layout")
 app.use(express.static('public'))
 
 //router middleware
-app.use('',require("./routes/api/router"))
+app.use('/', homeRouter)
 
 
 

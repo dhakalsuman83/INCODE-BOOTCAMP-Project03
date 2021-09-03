@@ -22,7 +22,7 @@ body{
 
 .form{
     margin:20px auto;
-    width:30rem;
+    max-width:30rem;
 }
 .form *{
     display: flex;
@@ -76,4 +76,34 @@ input[type="time" i]{
 .create-schedule-h3{
     margin-top:50px;
     color:brown;
+}
+
+table{
+    width:100%;
+}
+
+caption{
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+tr{
+    text-align: left;
+
+}
+
+tr:nth-child(odd){
+    background-color: #ddd;
+}
+
+
+
+table,th,td{
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th,td{
+    padding:10px;
 }
